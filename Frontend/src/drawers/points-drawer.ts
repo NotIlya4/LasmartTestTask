@@ -3,23 +3,18 @@ import { Event } from 'ts-typed-events';
 import Konva from 'konva';
 
 export class PointsDrawer {
-    private _points: Point[] = [];
-    private pointDbClickEvent: Event<Point> = new Event<Point>();
-    private pointDragendEvent: Event<Point> = new Event<Point>();
+    private pointDbClickEvent = new Event<{point: Point, eventObject: Konva.KonvaEventObject<MouseEvent>}>();
+    private pointDragmoveEvent = new Event<{point: Point, eventObject: Konva.KonvaEventObject<any>}>();
+    private pointDragendEvent = new Event<{point: Point, eventObject: Konva.KonvaEventObject<DragEvent>}>();
 
     constructor(private layer: Konva.Layer) {
         this.layer =  layer;
     }
 
-    public set points(points: Point[]) {
-        this._points = points;
-        this.draw();
-    }
-
-    private draw() {
+    public draw(points: Point[]): void {
         this.layer.destroyChildren();
 
-        this._points.forEach(point => {
+        points.forEach(point => {
             const circle = new Konva.Circle({
                 x: point.coordinates.x,
                 y: point.coordinates.y,
@@ -28,14 +23,16 @@ export class PointsDrawer {
                 draggable: true,
             });
 
-            circle.on('dblclick', () => {
-                this.pointDbClickEvent.emit(point);
+            circle.on('dblclick', dblclickEventContext => {
+                this.pointDbClickEvent.emit({point: point, eventObject: dblclickEventContext});
             });
 
+            circle.on('dragmove', dragmoveEventContext => {
+                this.pointDragmoveEvent.emit({point: point, eventObject: dragmoveEventContext});
+            })
+
             circle.on('dragend', (dragendEventContext) => {
-                point.coordinates.x = dragendEventContext.target.x();
-                point.coordinates.y = dragendEventContext.target.y();
-                this.pointDragendEvent.emit(point);
+                this.pointDragendEvent.emit({point: point, eventObject: dragendEventContext});
             });
 
             this.layer.add(circle);
@@ -44,11 +41,16 @@ export class PointsDrawer {
         this.layer.draw();
     }
 
-    public onPointDblClick(handler: (point: Point) => void): void {
+    public onPointDblClick(handler: (context: {point: Point, eventObject: Konva.KonvaEventObject<MouseEvent>}) => void): void {
         this.pointDbClickEvent.on(handler);
     }
 
-    public onPointDragend(handler: (point: Point) => void): void {
+    public onPointDragmove(handler: (context: {point: Point, eventObject: Konva.KonvaEventObject<any>}) => void): void {
+        this.pointDragmoveEvent.on(handler);
+    }
+
+    public onPointDragend(handler: (context: {point: Point, eventObject: Konva.KonvaEventObject<DragEvent>}) => void): void {
         this.pointDragendEvent.on(handler);
     }
 }
+
