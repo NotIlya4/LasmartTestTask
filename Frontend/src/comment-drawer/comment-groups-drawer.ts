@@ -2,26 +2,22 @@ import {CommentGroup} from "./comment-group";
 import {CommentGroupDrawerCore} from "./comment-group-drawer-core";
 
 export class CommentGroupsDrawer {
-    private internalCommentGroupDrawers: CommentGroupDrawerCore[] = [];
+    private commentGroupDrawers: CommentGroupDrawerCore[] = [];
 
     constructor(private parent: HTMLElement) {
     }
 
-    public set commentGroups(commentGroups: CommentGroup[]) {
-        this.draw(commentGroups);
-    }
-
-    public dispose(): void {
-        this.internalCommentGroupDrawers.forEach(d => d.dispose());
-        this.internalCommentGroupDrawers = [];
-    }
-
-    private draw(newCommentGroupContexts: CommentGroup[]): void {
+    public draw(commentGroups: CommentGroup[]): void {
         this.dispose();
-        this.internalCommentGroupDrawers = newCommentGroupContexts.map(c => {
+        this.commentGroupDrawers = commentGroups.map(c => {
             const commentGroupDrawer = new CommentGroupDrawerCore(this.parent);
             commentGroupDrawer.commentGroup = c;
             return commentGroupDrawer;
         });
+    }
+
+    public dispose(): void {
+        this.commentGroupDrawers.forEach(d => d.dispose());
+        this.commentGroupDrawers = [];
     }
 }

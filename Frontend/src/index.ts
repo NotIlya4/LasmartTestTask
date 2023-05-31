@@ -10,6 +10,7 @@ import {CommentGroupDrawerCore} from "./comment-drawer/comment-group-drawer-core
 import {DomProvider} from "./dom-provider";
 import {StageProvider} from "./stage-provider";
 import {CommentGroupsDrawer} from "./comment-drawer/comment-groups-drawer";
+import {PointsManager} from "./points-manager";
 
 const domProvider = new DomProvider();
 const stageProvider = new StageProvider(domProvider.konvaContainer);
@@ -18,33 +19,25 @@ const stagePositionReplicator = new KonvaPositionReplicator(stageProvider.stage,
 stagePositionReplicator.updatePosition();
 const commentContainerReplicator = new CommentsContainerPositionReplicator(domProvider.commentsContainer, domProvider.konvaContainer);
 commentContainerReplicator.updatePosition();
-
-new GridDrawer(stageProvider.gridLayer).draw(screen.availWidth, screen.availHeight);
-
-const pointDrawer = new PointsDrawer(stageProvider.pointsLayer);
-const pointsFromServer: Point[] = [
-    { id: 'asd', coordinates: {x: 0, y: 0}, radius: 30, color: 'brown', comments: [] },
-    { id: 'asd', coordinates: {x: 200, y: 200}, radius: 50, color: 'orange', comments: [] }
-];
-pointDrawer.points = pointsFromServer;
-
 window.addEventListener('resize', () => {
     commentContainerReplicator.updatePosition();
     stagePositionReplicator.updatePosition();
 })
+new GridDrawer(stageProvider.gridLayer).draw(screen.availWidth, screen.availHeight);
 
-const commentsDrawer = new CommentGroupsDrawer(domProvider.commentsContainer);
-commentsDrawer.commentGroups = [
-    {coordinates: {x: 100, y: 100}, comments: [
-            {id: 'asd', text: 'Im comment drawer!', backgroundColor: 'white'},
-            {id: 'asd', text: 'Im comment drawer! Im comment drawer! Im comment drawer!', backgroundColor: 'white'},
-            {id: 'asd', text: 'Im comment drawer! Im comment drawer!', backgroundColor: 'white'}
-        ]},
-    {coordinates: {x: 400, y: 200}, comments: [
-            {id: 'asd', text: 'Im comment drawer!', backgroundColor: 'gray'},
-            {id: 'asd', text: 'Im comment drawer! Im comment drawer! Im comment drawer!', backgroundColor: 'white'},
-            {id: 'asd', text: 'Im comment drawer! Im comment drawer!', backgroundColor: 'black'}
-        ]}
+
+const pointsFromServer: Point[] = [
+    { id: '1', coordinates: {x: 0, y: 0}, radius: 30, color: 'brown', comments: [
+            {text: 'Im comment drawer!', backgroundColor: 'white'},
+            {text: 'Im comment drawer! Im comment drawer! Im comment drawer!', backgroundColor: 'white'},
+            {text: 'Im comment drawer! Im comment drawer!', backgroundColor: 'white'}
+        ] },
+    { id: '2', coordinates: {x: 200, y: 200}, radius: 50, color: 'orange', comments: [
+            {text: 'Im comment drawer!', backgroundColor: 'gray'},
+            {text: 'Im comment drawer! Im comment drawer! Im comment drawer!', backgroundColor: 'white'},
+            {text: 'Im comment drawer! Im comment drawer!', backgroundColor: 'black'}
+        ] }
 ];
 
-commentsDrawer.dispose();
+const pointsManager = new PointsManager(new PointsDrawer(stageProvider.pointsLayer), new CommentGroupsDrawer(domProvider.commentsContainer));
+pointsManager.points = pointsFromServer;
