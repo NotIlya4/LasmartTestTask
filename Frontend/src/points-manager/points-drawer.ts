@@ -2,7 +2,14 @@ import {Point} from "../models/point";
 import { Event } from 'ts-typed-events';
 import Konva from 'konva';
 
-export class PointsDrawer {
+export interface IPointsDrawer {
+    draw(points: Point[]): void;
+    onPointDblClick(handler: (context: {point: Point, eventObject: Konva.KonvaEventObject<MouseEvent>}) => void): void;
+    onPointDragmove(handler: (context: {point: Point, eventObject: Konva.KonvaEventObject<any>}) => void): void;
+    onPointDragend(handler: (context: {point: Point, eventObject: Konva.KonvaEventObject<DragEvent>}) => void): void;
+}
+
+export class PointsDrawer implements IPointsDrawer {
     private pointDbClickEvent = new Event<{point: Point, eventObject: Konva.KonvaEventObject<MouseEvent>}>();
     private pointDragmoveEvent = new Event<{point: Point, eventObject: Konva.KonvaEventObject<any>}>();
     private pointDragendEvent = new Event<{point: Point, eventObject: Konva.KonvaEventObject<DragEvent>}>();

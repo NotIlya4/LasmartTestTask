@@ -1,30 +1,21 @@
 import {Point} from "./models/point";
-import {PointComment} from "./models/point-comment";
-import {PointsDrawer} from "./drawers/points-drawer";
-import Konva from "konva";
+import {PointsDrawer} from "./points-manager/points-drawer";
 import './styles.scss';
-import {KonvaPositionReplicator} from "./position-replicators/konva-position-replicator";
-import {GridDrawer} from "./drawers/grid-drawer";
-import {CommentsContainerPositionReplicator} from "./position-replicators/comments-container-position-replicator";
-import {CommentGroupDrawerCore} from "./comment-drawer/comment-group-drawer-core";
-import {DomProvider} from "./dom-provider";
-import {StageProvider} from "./stage-provider";
+import {GridDrawer} from "./grid-drawer/grid-drawer";
+import {PositionReplicator} from "./misc/position-replicator";
+import {DomProvider} from "./providers/dom-provider";
+import {KonvaProvider} from "./providers/konva-provider";
 import {CommentGroupsDrawer} from "./comment-drawer/comment-groups-drawer";
-import {PointsManager} from "./points-manager";
+import {PointsManager} from "./points-manager/points-manager";
 
 const domProvider = new DomProvider();
-const stageProvider = new StageProvider(domProvider.konvaContainer);
+const stageProvider = new KonvaProvider(domProvider.konvaContainer);
 
-const stagePositionReplicator = new KonvaPositionReplicator(stageProvider.stage, domProvider.pointsContainer);
-stagePositionReplicator.updatePosition();
-const commentContainerReplicator = new CommentsContainerPositionReplicator(domProvider.commentsContainer, domProvider.konvaContainer);
-commentContainerReplicator.updatePosition();
-window.addEventListener('resize', () => {
-    commentContainerReplicator.updatePosition();
-    stagePositionReplicator.updatePosition();
-})
+const positionReplicator = new PositionReplicator();
+positionReplicator.replicateForKonva(domProvider.pointsContainer, stageProvider.stage);
+positionReplicator.replicateForCommentsContainer(domProvider.konvaContainer, domProvider.commentsContainer);
+
 new GridDrawer(stageProvider.gridLayer).draw(screen.availWidth, screen.availHeight);
-
 
 const pointsFromServer: Point[] = [
     { id: '1', coordinates: {x: 0, y: 0}, radius: 30, color: 'brown', comments: [

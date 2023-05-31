@@ -1,6 +1,6 @@
 import Konva from "konva";
 
-export class StageProvider {
+export class KonvaProvider {
     private _stage: Konva.Stage;
     private _pointsLayer: Konva.Layer = new Konva.Layer();
     private _gridLayer: Konva.Layer = new Konva.Layer();

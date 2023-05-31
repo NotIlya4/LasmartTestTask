@@ -1,12 +1,16 @@
 import Konva from "konva";
 import {GridDrawerOptions} from "./grid-drawer-options";
 
+export interface IGridDrawer {
+    draw(width: number, height: number): void;
+}
+
 export class GridDrawer {
     constructor(private layer: Konva.Layer, private gridDrawerOptions: GridDrawerOptions = {color: 'gray', width: 2, distanceBetweenLines: 100}) {
 
     }
 
-    public draw(width: number, height: number) {
+    public draw(width: number, height: number): void {
         this.layer.destroyChildren();
 
         for (let x = this.gridDrawerOptions.distanceBetweenLines; x < width; x += this.gridDrawerOptions.distanceBetweenLines) {

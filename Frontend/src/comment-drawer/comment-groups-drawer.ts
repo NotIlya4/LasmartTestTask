@@ -1,6 +1,10 @@
 import {CommentGroup} from "./comment-group";
 import {CommentGroupDrawerCore} from "./comment-group-drawer-core";
 
+export interface ICommentGroupsDrawer {
+    draw(commentGroups: CommentGroup[]): void;
+}
+
 export class CommentGroupsDrawer {
     private commentGroupDrawers: CommentGroupDrawerCore[] = [];
 

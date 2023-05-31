@@ -1,7 +1,7 @@
-import {PointsDrawer} from "./drawers/points-drawer";
-import {Point} from "./models/point";
-import {CommentGroupsDrawer} from "./comment-drawer/comment-groups-drawer";
-import {CommentGroup} from "./comment-drawer/comment-group";
+import {IPointsDrawer, PointsDrawer} from "./points-drawer";
+import {Point} from "../models/point";
+import {CommentGroupsDrawer, ICommentGroupsDrawer} from "../comment-drawer/comment-groups-drawer";
+import {CommentGroup} from "../comment-drawer/comment-group";
 import Konva from "konva";
 import { Event } from 'ts-typed-events';
 
@@ -9,7 +9,7 @@ export class PointsManager {
     private _points: Point[] = [];
     private onPointRemove: Event<Point> = new Event<Point>();
 
-    constructor(private pointDrawer: PointsDrawer, private commentGroupsDrawer: CommentGroupsDrawer) {
+    constructor(private pointDrawer: IPointsDrawer, private commentGroupsDrawer: ICommentGroupsDrawer) {
         pointDrawer.onPointDragmove(context => {
             const point: Point | undefined = this._points.find(p => p.id === context.point.id);
             if (point !== undefined) {
