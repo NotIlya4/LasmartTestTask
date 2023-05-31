@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.ts',
+    entry: './app/index.ts',
     mode: 'production',
     devtool: 'inline-source-map',
     module: {
@@ -31,8 +31,8 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            favicon: "src/images/favicon.ico",
-            template: 'src/index.html'
+            favicon: "app/images/favicon.ico",
+            template: 'app/index.html'
         })
     ]
 };
