@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./dist/",
+    "strictNullChecks": true,
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "es6",

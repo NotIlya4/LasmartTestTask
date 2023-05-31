@@ -1,0 +1,29 @@
+body {
+  margin: 20px;
+}
+
+.comments-flex {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  position: absolute;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.comment {
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  align-self: center;
+  width: auto;
+  border: 1px solid #262624;
+  border-radius: 3px;
+  padding: 3px;
+}
+
+#konva-container {
+  border: 2px solid #4d4d4d;
+  overflow: hidden;
+  border-radius: 5px;
+}
