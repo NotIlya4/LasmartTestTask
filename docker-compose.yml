@@ -8,5 +8,6 @@ services:
   backend:
     container_name: backend
     build: ./Backend/
+    image: notilya4/lasmart-test-task.backend
     ports:
       - 5000:80
