@@ -56,6 +56,23 @@ namespace Core.EntityFramework
                             id: 7,
                             text: "Comment 2",
                             backgroundColor: "white"),
+                    }),
+                new Point(
+                    id: 3,
+                    x: 1500,
+                    y: 1000,
+                    radius: 200,
+                    color: "brown",
+                    comments: new []
+                    {
+                        new Comment(
+                            id: 8,
+                            text: "Comment 1 Comment 1",
+                            backgroundColor: "red"),
+                        new Comment(
+                            id: 9,
+                            text: "Comment 2 Comment 2 Comment 2",
+                            backgroundColor: "green"),
                     })
             };
         }

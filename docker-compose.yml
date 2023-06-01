@@ -2,5 +2,6 @@ services:
   frontend:
     container_name: frontend
     build: ./Frontend/
+    image: notilya4/lasmart-test-task.frontend
     ports:
       - 5001:80
