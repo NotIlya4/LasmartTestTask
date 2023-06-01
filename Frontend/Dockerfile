@@ -2,10 +2,10 @@ FROM node as builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY ./src/package*.json ./
 RUN npm ci
 
-COPY . .
+COPY ./src .
 RUN npm run build
 
 FROM nginx
