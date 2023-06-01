@@ -1,0 +1,34 @@
+name: Run unit tests
+
+on:
+  push:
+    branches:
+    paths:
+      - Backend/src/**
+  pull_request:
+    branches:
+    paths:
+      - Backend/src/**
+
+jobs:
+  run_unit_tests:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 5
+
+      - name: Restore dependencies
+        run: |
+          cd Backend/src
+          dotnet restore
+
+      - name: Run tests
+        run: |
+          cd Backend/src/UnitTests
+          dotnet test --no-restore
