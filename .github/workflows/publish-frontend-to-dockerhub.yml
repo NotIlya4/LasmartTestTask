@@ -1,4 +1,4 @@
-name: Publish image to docker hub
+name: Publish frontend image to docker hub
 
 on:
   push:
