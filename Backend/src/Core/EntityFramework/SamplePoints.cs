@@ -60,7 +60,7 @@ namespace Core.EntityFramework
                 new Point(
                     id: 3,
                     x: 1500,
-                    y: 1000,
+                    y: 500,
                     radius: 200,
                     color: "brown",
                     comments: new []
