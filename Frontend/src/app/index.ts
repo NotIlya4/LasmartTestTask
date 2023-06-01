@@ -1,4 +1,3 @@
-import {Point} from "./models/point";
 import {PointsDrawer} from "./points-manager/points-drawer";
 import './styles.scss';
 import {GridDrawer} from "./grid-drawer/grid-drawer";
@@ -7,28 +6,29 @@ import {DomProvider} from "./providers/dom-provider";
 import {KonvaProvider} from "./providers/konva-provider";
 import {CommentGroupsDrawer} from "./comment-drawer/comment-groups-drawer";
 import {PointsManager} from "./points-manager/points-manager";
+import * as $ from "jquery";
+import {PointsClient} from "./points-client/client";
+import {BackendModelMapper} from "./misc/backend-model-mapper";
 
-const domProvider = new DomProvider();
-const stageProvider = new KonvaProvider(domProvider.konvaContainer);
+$(async () => {
+    const domProvider: DomProvider = new DomProvider();
+    const stageProvider: KonvaProvider = new KonvaProvider(domProvider.konvaContainer);
 
-const positionReplicator = new PositionReplicator();
-positionReplicator.replicateForKonva(domProvider.pointsContainer, stageProvider.stage);
-positionReplicator.replicateForCommentsContainer(domProvider.konvaContainer, domProvider.commentsContainer);
+    const positionReplicator: PositionReplicator = new PositionReplicator();
+    positionReplicator.replicateForKonva(domProvider.pointsContainer, stageProvider.stage);
+    positionReplicator.replicateForCommentsContainer(domProvider.konvaContainer, domProvider.commentsContainer);
 
-new GridDrawer(stageProvider.gridLayer).draw(screen.availWidth, screen.availHeight);
+    new GridDrawer(stageProvider.gridLayer).draw(screen.availWidth, screen.availHeight);
 
-const pointsFromServer: Point[] = [
-    { id: '1', coordinates: {x: 0, y: 0}, radius: 30, color: 'brown', comments: [
-            {text: 'Im comment drawer!', backgroundColor: 'white'},
-            {text: 'Im comment drawer! Im comment drawer! Im comment drawer!', backgroundColor: 'white'},
-            {text: 'Im comment drawer! Im comment drawer!', backgroundColor: 'white'}
-        ] },
-    { id: '2', coordinates: {x: 200, y: 200}, radius: 50, color: 'orange', comments: [
-            {text: 'Im comment drawer!', backgroundColor: 'gray'},
-            {text: 'Im comment drawer! Im comment drawer! Im comment drawer!', backgroundColor: 'white'},
-            {text: 'Im comment drawer! Im comment drawer!', backgroundColor: 'black'}
-        ] }
-];
+    const client: PointsClient = new PointsClient(new BackendModelMapper());
 
-const pointsManager = new PointsManager(new PointsDrawer(stageProvider.pointsLayer), new CommentGroupsDrawer(domProvider.commentsContainer));
-pointsManager.points = pointsFromServer;
+    const pointsManager: PointsManager = new PointsManager(new PointsDrawer(stageProvider.pointsLayer), new CommentGroupsDrawer(domProvider.commentsContainer));
+    pointsManager.points = await client.getPoints();
+
+    pointsManager.onPointDelete(async point => {
+        await client.removePoint(point.id);
+    })
+    pointsManager.onPointDragend(async context => {
+        await client.updatePointPosition(context.point.id, context.point.coordinates.x, context.point.coordinates.y);
+    })
+})

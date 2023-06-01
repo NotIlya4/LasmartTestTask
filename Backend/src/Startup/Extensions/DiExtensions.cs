@@ -27,5 +27,18 @@ namespace Startup.Extensions
             services.AddScoped<IPointsService, PointsService>();
             services.AddScoped<ExceptionCatcherMiddleware>();
         }
+
+        public static void AddConfiguredCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin();
+                });
+            });
+        }
     }
 }

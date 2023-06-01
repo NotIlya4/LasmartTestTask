@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Startup.Controllers
 {
     [ApiController]
+    [ProducesResponseType(500)]
     [Route("api/points")]
     public class PointsController : ControllerBase
     {
@@ -21,6 +22,7 @@ namespace Startup.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(200)]
         public async Task<ActionResult<List<Point>>> GetPoints()
         {
             List<Point> points = await _repository.GetPoints();
@@ -29,6 +31,7 @@ namespace Startup.Controllers
 
         [HttpDelete]
         [Route("id/{id}")]
+        [ProducesResponseType(204)]
         public async Task<ActionResult> RemovePoint(int id)
         {
             await _repository.RemovePoint(id);
@@ -36,6 +39,7 @@ namespace Startup.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(204)]
         public async Task<ActionResult> AddPoint([FromBody] Point point)
         {
             await _repository.AddPoint(point);
@@ -43,6 +47,7 @@ namespace Startup.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(204)]
         [Route("position")]
         public async Task<ActionResult> UpdatePointPosition([FromBody] UpdatePointPositionRequest request)
         {

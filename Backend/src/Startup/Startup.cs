@@ -23,6 +23,7 @@ namespace Startup
             services.AddRepository();
             services.AddService();
             services.AddConfiguredDb();
+            services.AddConfiguredCors();
             
             services.AddControllers();
             services.AddSwaggerGen();
@@ -30,7 +31,10 @@ namespace Startup
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.ConfigureDb().GetAwaiter().GetResult();
+            
             app.UseMiddleware<ExceptionCatcherMiddleware>();
+            app.UseCors();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Lasmart Test Task"));
             app.UseRouting();

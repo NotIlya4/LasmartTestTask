@@ -23,7 +23,7 @@ namespace Startup.Middlewares
             }
             catch (Exception e)
             {
-                _logger.LogWarning(e, "Exception caught in ExceptionCatcherMiddleware during execution");
+                _logger.LogError(e, "Exception caught in ExceptionCatcherMiddleware during execution");
 
                 object responseDto = new
                 {

@@ -1,4 +1,5 @@
-﻿using Core.Models;
+﻿using System.Collections.Generic;
+using Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.EntityFramework

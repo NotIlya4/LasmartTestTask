@@ -41,7 +41,7 @@ export class PointsManager {
         this.commentGroupsDrawer.draw(this.pointsToCommentGroups(this._points));
     }
 
-    private removePoint(pointId: string): void {
+    private removePoint(pointId: number): void {
         this._points = this._points.filter(p => p.id !== pointId);
         this.draw();
     }
